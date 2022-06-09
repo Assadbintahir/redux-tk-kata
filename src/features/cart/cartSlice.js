@@ -14,6 +14,13 @@ export const getCartAPI = createAsyncThunk('cart/getCartAPI', () => {
         .catch(() => console.log('API fetch operation failed'));
 })
 
+export const getCartsWithThunkAPI = createAsyncThunk('cart/getCartsWithThunkAPI', async (name, thunkAPI) => {
+    console.log(name);
+    console.log(thunkAPI.signal);
+    console.log(thunkAPI.requestId);
+    console.log(thunkAPI.extra);
+})
+
 const cartSlice = createSlice({
     name: 'cart',
     initialState,

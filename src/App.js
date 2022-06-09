@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Navbar from './components/Navbar';
 import CartContainer from './components/CartContainer';
 import Modal from './components/Modal';
-import { calculateTotals, getCartAPI } from './features/cart/cartSlice';
+import { calculateTotals, getCartAPI, getCartsWithThunkAPI } from './features/cart/cartSlice';
 
 function App() {
   const dispatch = useDispatch();
@@ -12,6 +12,7 @@ function App() {
 
   useEffect(() => {
     dispatch(getCartAPI());
+    dispatch(getCartsWithThunkAPI());
   }, [])
 
   useEffect(() => {
