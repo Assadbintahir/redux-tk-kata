@@ -1,23 +1,23 @@
 import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import Navbar from './components/Navbar';
 import CartContainer from './components/CartContainer';
 import Modal from './components/Modal';
 import { calculateTotals, getCartAPI, getCartsWithThunkAPI } from './features/cart/cartSlice';
+import { useAppDispatch, useAppSelector } from './app/hooks';
 
 function App() {
-  const dispatch = useDispatch();
-  const { cartItems, isLoading } = useSelector((state) => state.cart);
-  const { isOpen } = useSelector((state) => state.modal);
+  const { cartItems, isLoading } = useAppSelector((state) => state.cart);
+  const { isOpen } = useAppSelector((state) => state.modal);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getCartAPI());
     dispatch(getCartsWithThunkAPI());
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     dispatch(calculateTotals());
-  }, [cartItems]);
+  }, [cartItems, dispatch]);
 
 
   if (isLoading) {
@@ -37,3 +37,4 @@ function App() {
   </main>;
 }
 export default App;
+

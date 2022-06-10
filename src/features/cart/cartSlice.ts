@@ -1,7 +1,14 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import cartData from '../../cartItems';
 
-const initialState = {
+interface CartState {
+    cartItems: typeof cartData,
+    amount: number,
+    total: number,
+    isLoading: boolean,
+}
+
+const initialState: CartState = {
     cartItems: cartData,
     amount: cartData.length,
     total: 0,
@@ -28,40 +35,44 @@ const cartSlice = createSlice({
         clearCart: (state) => {
             state.cartItems = [];
         },
-        removeItem: (state, action) => {
+        removeItem: (state, action: PayloadAction<string>) => {
             const itemId = action.payload;
             state.cartItems = state.cartItems.filter((item) => item.id !== itemId);
         },
-        increase: (state, { payload }) => {
+        increase: (state, { payload }: PayloadAction<{ id: string }>) => {
             const cartItem = state.cartItems.find((item) => item.id === payload.id);
-            cartItem.amount = cartItem.amount + 1;
+            if(cartItem) {
+                cartItem.amount = cartItem.amount + 1;
+            }
         },
-        decrease: (state, { payload }) => {
+        decrease: (state, { payload }: PayloadAction<{ id: string }>) => {
             const cartItem = state.cartItems.find((item) => item.id === payload.id);
-            cartItem.amount = cartItem.amount - 1;
+            if(cartItem) {
+                cartItem.amount = cartItem.amount - 1;
+            }
         },
         calculateTotals: (state) => {
             let amount = 0;
             let total = 0;
             state.cartItems.forEach((item) => {
                 amount += item.amount;
-                total += item.amount * item.price;
+                total += item.amount * Number(item.price);
             });
             state.amount = amount;
             state.total = total;
         },
     },
-    extraReducers: {
-        [getCartAPI.pending]: (state) => {
+    extraReducers: (builder) => {
+        builder.addCase(getCartAPI.pending, (state) => {
             state.isLoading = true;
-        },
-        [getCartAPI.fulfilled]: (state, action) => {
+        });
+        builder.addCase(getCartAPI.fulfilled, (state, action: PayloadAction<typeof cartData>) => {
             state.isLoading = false;
             state.cartItems = action.payload;
-        },
-        [getCartAPI.rejected]: (state) => {
+        });
+        builder.addCase(getCartAPI.rejected, (state) => {
             state.isLoading = false;
-        }
+        });
     }
 });
 

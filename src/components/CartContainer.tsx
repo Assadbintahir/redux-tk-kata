@@ -1,12 +1,11 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import CartItem from './CartItem.js';
-import { clearCart } from '../features/cart/cartSlice';
+import CartItem from './CartItem';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { openModal } from '../features/modal/modalSlice';
 
 const CartContainer = () => {
-  const { cartItems, total, amount } = useSelector((store) => store.cart);
-  const dispatch = useDispatch();
+  const { cartItems, total, amount } = useAppSelector((store) => store.cart);
+  const dispatch = useAppDispatch();
 
   if (amount < 1) {
     return (

@@ -1,8 +1,8 @@
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../app/hooks';
 import { CartIcon } from '../icons';
 
 const Navbar = () => {
-  const { amount } = useSelector((store) => store.cart);
+  const { amount } = useAppSelector((store) => store.cart);
 
   return (
     <nav>
